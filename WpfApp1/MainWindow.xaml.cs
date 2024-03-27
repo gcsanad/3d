@@ -22,7 +22,8 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         List<Gyongy> gyongyok = File.ReadAllLines("gyongyok.txt").Skip(1).Select(x => new Gyongy(x)).ToList();
-        int index = 1;
+        int tavolsag = 10;
+        Random rnd = new Random();
         public MainWindow()
         {
             InitializeComponent();
@@ -30,15 +31,30 @@ namespace WpfApp1
             {
                 
                 EllipsoidVisual3D gyongy3D = new EllipsoidVisual3D();
-                Random rnd = new Random();
-                gyongy3D.RadiusX = 2;
-                gyongy3D.RadiusY = 2;
-                gyongy3D.RadiusZ = 3;
-                gyongy3D.Center = new Point3D(gyongy.X, gyongy.Y, gyongy.Z);
+                gyongy3D.RadiusX = gyongy.Ertek;
+                gyongy3D.RadiusY = gyongy.Ertek;
+                gyongy3D.RadiusZ = gyongy.Ertek;
+                gyongy3D.Center = new Point3D(gyongy.X*tavolsag, gyongy.Y*tavolsag, gyongy.Z*tavolsag);
                 gyongy3D.Fill = new SolidColorBrush(Color.FromRgb((byte)rnd.Next(0,255), (byte)rnd.Next(0, 255), (byte)rnd.Next(0, 255)));                
                 ter.Children.Add(gyongy3D);
 
             }
+
+            
+
+
+        }
+
+        private LinesVisual3D Vonalak(Gyongy elso, Gyongy masodik)
+        {
+            LinesVisual3D lines = new()
+            {
+                Points = new PointCollection(new Point3D[] {elso.X,elso.Y,elso.Z})
+            };
+
+            lines.Thickness = 10;
+
+            ter.Children.Add(lines);
         }
     }
 }
